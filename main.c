@@ -38,7 +38,7 @@ void criarpessoas(int iteracoes) {
 
     for (int i = 0; i < NUM_PESSOAS; i++) {
         pessoas[i].id = i;
-        strcpy(pessoas[i].nome, nome[i]); 
+        strcpy(pessoas[i].nome, nomes[i]); 
         pessoas[i].prioridadeinicio = prioridades[i];
         pessoas[i].prioridadeatual = prioridades[i];
         pessoas[i].iteracoes = iteracoes;
