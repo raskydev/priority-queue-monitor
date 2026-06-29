@@ -3,6 +3,13 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <string.h>
+
+void espera(int id);
+void libera(int id);
+void monitor_init();
+
+void *thread_gerente_run(void *arg);
+
 #define NUM_PESSOAS 8 //numero de pessoas e thread
 
 //struct de cada pessoa para controlar a fila
@@ -62,8 +69,9 @@ void *atenderpessoa(void *arg) {
     clientes *p = (clientes *)arg;
 
     for (int i = 0; i < p->iteracoes; i++) {
-        printf("%s chegou na loterica.\n", p->nome);
+        espera(p->id);
         caixa(p);
+        libera(p->id);
         printf("%s vai para casa.\n", p->nome);
         descanso();
     }
@@ -81,6 +89,8 @@ int main(int argc, char *argv[])
 
     int iteracoes = atoi(argv[1]);
 
+    monitor_init();
+
     criarpessoas(iteracoes);
 
     for(int i=0; i < NUM_PESSOAS; i++)
@@ -88,8 +98,10 @@ int main(int argc, char *argv[])
         pthread_create(&threads[i], NULL, atenderpessoa, &pessoas[i]);
     }
 
-    for(int i=0; i< NUM_PESSOAS; i++) //aguarda para finaliza de thread
-    {
+    pthread_t thread_gerente;
+    pthread_create(&thread_gerente, NULL, thread_gerente_run, NULL);
+
+    for(int i=0; i < NUM_PESSOAS; i++) {
         pthread_join(threads[i], NULL);
     }
 

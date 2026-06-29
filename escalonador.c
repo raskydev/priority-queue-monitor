@@ -72,6 +72,13 @@ int escolher_proximo_cliente() {
         }
     }
 
+     if (proximo_id != -1){
+        pessoas[proximo_id].prioridadeatual = pessoas[proximo_id].prioridadeinicio;
+        monitor.furos_de_fila[proximo_id] = 0;
+    }
+
+    return proximo_id;
+
     return proximo_id;
 }
 
